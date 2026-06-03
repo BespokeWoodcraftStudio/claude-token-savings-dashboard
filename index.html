@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Token Savings</title>
+<style>
+  :root {
+    /* Cloud Mem — indigo / violet */
+    --mem-1: #6366f1;
+    --mem-2: #8b5cf6;
+    --mem-glow: rgba(99, 102, 241, 0.55);
+    /* Graphify — teal / emerald */
+    --gfx-1: #14b8a6;
+    --gfx-2: #10b981;
+    --gfx-glow: rgba(20, 184, 166, 0.5);
+
+    --bg: #0a0e16;
+    --ink: #eef1f8;
+    --ink-dim: #9aa3b8;
+    --ink-faint: #69728a;
+    --card: rgba(255, 255, 255, 0.035);
+    --card-hi: rgba(255, 255, 255, 0.06);
+    --border: rgba(255, 255, 255, 0.09);
+    --border-hi: rgba(255, 255, 255, 0.16);
+
+    --sans: ui-sans-serif, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --mono: ui-monospace, "SF Mono", "JetBrains Mono", "Roboto Mono", Menlo, Consolas, monospace;
+    --shadow: 0 18px 50px -20px rgba(0, 0, 0, 0.75), 0 2px 8px -2px rgba(0, 0, 0, 0.4);
+    --radius: 16px;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  body::before {
+    content: "";
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 70% 55% at 12% 0%, rgba(99, 102, 241, 0.16), transparent 60%),
+      radial-gradient(ellipse 60% 50% at 92% 8%, rgba(20, 184, 166, 0.13), transparent 58%),
+      radial-gradient(ellipse 80% 60% at 50% 105%, rgba(139, 92, 246, 0.10), transparent 60%),
+      radial-gradient(ellipse 50% 40% at 88% 88%, rgba(16, 185, 129, 0.08), transparent 60%);
+  }
+  .wrap { position: relative; z-index: 1; max-width: 1180px; margin: 0 auto; padding: 34px 30px 60px; }
+
+  /* HEADER */
+  header.topbar { display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap; margin-bottom: 34px; }
+  .brand { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .brand .site { font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-faint); font-weight: 600; }
+  .brand .title {
+    font-size: 24px; font-weight: 700; letter-spacing: -0.01em;
+    background: linear-gradient(92deg, #fff 10%, #c9d0e6 90%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .updated-pill {
+    display: inline-flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--ink-dim);
+    background: var(--card); border: 1px solid var(--border); padding: 7px 14px; border-radius: 999px;
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); white-space: nowrap;
+  }
+  .updated-pill .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gfx-2); box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.18); }
+  .updated-pill b { color: var(--ink); font-weight: 600; }
+
+  /* CARD BASE */
+  .card {
+    background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+    backdrop-filter: blur(14px) saturate(120%); -webkit-backdrop-filter: blur(14px) saturate(120%);
+    box-shadow: var(--shadow);
+    transition: transform 0.25s cubic-bezier(.2,.7,.3,1), border-color 0.25s, background 0.25s;
+  }
+  .card.hoverable:hover { transform: translateY(-3px); border-color: var(--border-hi); background: var(--card-hi); }
+
+  /* HERO */
+  .hero { position: relative; overflow: hidden; padding: 36px 38px 34px; margin-bottom: 22px; }
+  .hero::after {
+    content: ""; position: absolute; top: -40%; right: 0; width: 52%; height: 180%;
+    background: radial-gradient(circle at center, var(--mem-glow), transparent 70%); opacity: 0.18; pointer-events: none;
+  }
+  .hero.gfx-lead::after { background: radial-gradient(circle at center, var(--gfx-glow), transparent 70%); }
+  .hero .kicker { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); font-weight: 600; margin-bottom: 14px; }
+  .hero .bignum {
+    font-family: var(--mono); font-size: clamp(54px, 9vw, 92px); font-weight: 700; line-height: 0.98; letter-spacing: -0.03em;
+    background: linear-gradient(96deg, var(--mem-1) 0%, var(--mem-2) 48%, var(--gfx-1) 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent; margin: 0;
+  }
+  .hero.gfx-lead .bignum { background: linear-gradient(96deg, var(--gfx-1), var(--gfx-2)); -webkit-background-clip: text; background-clip: text; }
+  .hero .hero-label { font-size: 16px; color: var(--ink); font-weight: 500; margin-top: 12px; max-width: 640px; }
+  .hero .hero-sub { font-size: 14px; color: var(--ink-dim); margin-top: 6px; }
+  .hero .hero-sub .mono { font-family: var(--mono); color: var(--ink); font-weight: 600; }
+  .hero .caveat { font-size: 12.5px; color: var(--ink-faint); margin-top: 16px; max-width: 680px; line-height: 1.55; border-left: 2px solid var(--border-hi); padding-left: 12px; }
+
+  /* STAT CARD ROW — auto-fits however many cards exist */
+  .stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; margin-bottom: 26px; }
+  .stat { padding: 18px 18px 14px; display: flex; flex-direction: column; gap: 4px; position: relative; overflow: hidden; }
+  .stat .stat-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .stat .stat-label { font-size: 11.5px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-faint); font-weight: 600; }
+  .stat .stat-val { font-family: var(--mono); font-size: 27px; font-weight: 700; letter-spacing: -0.02em; color: var(--ink); margin-top: 2px; }
+  .stat .stat-foot { font-size: 12px; color: var(--ink-dim); }
+  .stat .spark-box { position: relative; width: 100%; height: 30px; margin-top: 10px; overflow: hidden; }
+  .stat .spark-box canvas { display: block; }
+  .stat .ic { width: 30px; height: 30px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+  .ic.mem { background: rgba(99,102,241,0.16); color: #b4bbff; }
+  .ic.gfx { background: rgba(20,184,166,0.16); color: #7fe9d6; }
+  .stat.accent-mem::before, .stat.accent-gfx::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
+  .stat.accent-mem::before { background: linear-gradient(var(--mem-1), var(--mem-2)); }
+  .stat.accent-gfx::before { background: linear-gradient(var(--gfx-1), var(--gfx-2)); }
+
+  /* PANELS */
+  .panel { padding: 26px 28px 28px; margin-bottom: 22px; }
+  .panel-head { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+  .panel-badge { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; padding: 5px 11px; border-radius: 999px; }
+  .panel-badge.mem { background: rgba(99,102,241,0.16); color: #c3c8ff; border: 1px solid rgba(99,102,241,0.3); }
+  .panel-badge.gfx { background: rgba(20,184,166,0.16); color: #8ff0df; border: 1px solid rgba(20,184,166,0.3); }
+  .panel-head h2 { font-size: 19px; font-weight: 700; margin: 0; letter-spacing: -0.01em; }
+  .panel-sub { font-size: 13px; color: var(--ink-dim); margin: 0 0 20px; }
+
+  .strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; margin-bottom: 22px; }
+  .strip .cell { background: rgba(255,255,255,0.025); border: 1px solid var(--border); border-radius: 12px; padding: 13px 14px; }
+  .strip .cell .k { font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-faint); font-weight: 600; }
+  .strip .cell .v { font-family: var(--mono); font-size: 21px; font-weight: 700; color: var(--ink); margin-top: 3px; letter-spacing: -0.02em; }
+  .strip .cell .v.mem { color: #c3c8ff; }
+  .strip .cell .v.gfx { color: #8ff0df; }
+
+  .chart-box { position: relative; width: 100%; }
+  .chart-box.tall { height: 290px; }
+  .chart-box.mid { height: 150px; }
+
+  /* per-project breakdown — each project gets its OWN color */
+  .proj-head { font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-faint); font-weight: 600; margin: 26px 0 14px; }
+  .proj-list { display: flex; flex-direction: column; gap: 11px; }
+  .proj { display: grid; grid-template-columns: 190px 1fr auto; align-items: center; gap: 16px; }
+  .proj .pname { display: flex; align-items: center; gap: 9px; min-width: 0; }
+  .proj .swatch { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+  .proj .pname .nm { font-size: 14px; font-weight: 600; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .proj .tag { font-size: 9.5px; letter-spacing: 0.05em; text-transform: uppercase; font-weight: 700; padding: 2px 7px; border-radius: 6px; background: rgba(255,255,255,0.1); color: var(--ink); border: 1px solid var(--border-hi); flex-shrink: 0; }
+  .proj .barwrap { position: relative; height: 24px; border-radius: 7px; background: rgba(255,255,255,0.04); overflow: hidden; }
+  .proj .bar { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 7px; width: 0; transition: width 1.1s cubic-bezier(.2,.7,.3,1); }
+  .proj .pmeta { font-family: var(--mono); font-size: 12.5px; color: var(--ink-dim); text-align: right; white-space: nowrap; }
+  .proj .pmeta b { color: var(--ink); font-weight: 600; }
+
+  /* graphify comparison bars */
+  .vs { display: flex; flex-direction: column; gap: 16px; margin: 4px 0 8px; }
+  .vs-row { display: grid; grid-template-columns: 110px 1fr auto; align-items: center; gap: 14px; }
+  .vs-row .vs-lbl { font-size: 13px; color: var(--ink-dim); }
+  .vs-row .vs-lbl b { display: block; color: var(--ink); font-weight: 600; font-size: 13.5px; }
+  .vs-track { position: relative; height: 34px; border-radius: 9px; background: rgba(255,255,255,0.04); overflow: hidden; }
+  .vs-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 0; border-radius: 9px; transition: width 1.2s cubic-bezier(.2,.7,.3,1); }
+  .vs-fill.naive { background: linear-gradient(90deg, rgba(120,128,170,0.5), rgba(150,158,200,0.35)); }
+  .vs-fill.graph { background: linear-gradient(90deg, var(--gfx-1), var(--gfx-2)); box-shadow: 0 0 22px -3px var(--gfx-glow); }
+  .vs-num { font-family: var(--mono); font-size: 13px; font-weight: 700; color: var(--ink); white-space: nowrap; text-align: right; }
+  .vs-num.graph { color: #8ff0df; }
+
+  .gfx-grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 22px; align-items: start; }
+  .gfx-hero { display: flex; flex-direction: column; gap: 4px; margin-bottom: 18px; }
+  .gfx-hero .gx-num { font-family: var(--mono); font-size: 56px; font-weight: 700; line-height: 1; letter-spacing: -0.03em; background: linear-gradient(96deg, var(--gfx-1), var(--gfx-2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .gfx-hero .gx-lbl { font-size: 14px; color: var(--ink-dim); }
+  .gfx-hero .gx-lbl b { color: var(--ink); }
+
+  .ledger { background: rgba(255,255,255,0.025); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; margin-top: 4px; }
+  .ledger .lh { font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-faint); font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .ledger .lrow { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 5px 0; border-bottom: 1px dashed var(--border); }
+  .ledger .lrow:last-child { border-bottom: 0; }
+  .ledger .lk { font-size: 13px; color: var(--ink-dim); }
+  .ledger .lv { font-family: var(--mono); font-size: 14px; color: var(--ink); font-weight: 600; }
+  .ledger .lnote { font-size: 11.5px; color: var(--ink-faint); margin-top: 10px; line-height: 1.5; }
+
+  .illus { margin-top: 16px; background: linear-gradient(120deg, rgba(20,184,166,0.07), rgba(16,185,129,0.04)); border: 1px solid rgba(20,184,166,0.28); border-radius: 12px; padding: 15px 16px; }
+  .illus .il-tag { display: inline-flex; align-items: center; gap: 6px; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; color: #0a0e16; background: var(--gfx-2); padding: 3px 9px; border-radius: 999px; margin-bottom: 9px; }
+  .illus .il-body { font-size: 13.5px; color: var(--ink); line-height: 1.55; }
+  .illus .il-body .mono { font-family: var(--mono); font-weight: 700; color: #8ff0df; }
+  .illus .il-foot { font-size: 11.5px; color: var(--ink-faint); margin-top: 7px; }
+
+  .hist-note { font-size: 12.5px; color: var(--ink-dim); margin-top: 14px; background: rgba(255,255,255,0.025); border: 1px solid var(--border); border-radius: 10px; padding: 11px 14px; line-height: 1.5; }
+  .hist-note b { color: var(--ink); }
+
+  /* NOT-DETECTED card (inside a panel) */
+  .notdetect { display: flex; gap: 16px; align-items: flex-start; padding: 22px 22px; background: rgba(255,255,255,0.02); border: 1px dashed var(--border-hi); border-radius: 14px; }
+  .notdetect .nd-ic { width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; background: rgba(255,255,255,0.05); }
+  .notdetect.mem .nd-ic { background: rgba(99,102,241,0.14); }
+  .notdetect.gfx .nd-ic { background: rgba(20,184,166,0.14); }
+  .notdetect .nd-body { min-width: 0; }
+  .notdetect .nd-title { font-size: 15px; font-weight: 700; color: var(--ink); margin: 0 0 5px; }
+  .notdetect .nd-reason { font-size: 13px; color: var(--ink-dim); margin: 0 0 8px; line-height: 1.55; }
+  .notdetect .nd-hint { font-size: 12.5px; color: var(--ink-faint); line-height: 1.55; }
+  .notdetect .nd-hint code { font-family: var(--mono); font-size: 12px; color: #c3c8ff; background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.28); padding: 1px 6px; border-radius: 6px; }
+  .notdetect.gfx .nd-hint code { color: #8ff0df; background: rgba(20,184,166,0.12); border-color: rgba(20,184,166,0.28); }
+
+  /* FOOTER */
+  footer { margin-top: 34px; padding-top: 22px; border-top: 1px solid var(--border); font-size: 12.5px; color: var(--ink-faint); line-height: 1.65; }
+  footer .frate { display: inline-block; margin-top: 8px; font-family: var(--mono); color: var(--ink-dim); background: rgba(255,255,255,0.03); border: 1px solid var(--border); padding: 4px 11px; border-radius: 8px; }
+  footer b { color: var(--ink-dim); }
+  footer a { color: var(--ink-dim); }
+
+  /* FULL EMPTY STATE */
+  .empty { max-width: 560px; margin: 11vh auto; text-align: center; padding: 42px 34px; }
+  .empty .e-emoji { font-size: 40px; margin-bottom: 14px; }
+  .empty h1 { font-size: 22px; margin: 0 0 10px; }
+  .empty p { color: var(--ink-dim); font-size: 14px; margin: 0 0 18px; line-height: 1.6; }
+  .empty code { font-family: var(--mono); font-size: 13px; color: #c3c8ff; background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.3); padding: 9px 14px; border-radius: 9px; display: inline-block; }
+
+  /* RESPONSIVE */
+  @media (max-width: 1024px) { .gfx-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 880px) {
+    .wrap { padding: 26px 18px 50px; }
+    .proj { grid-template-columns: 130px 1fr; }
+    .proj .pmeta { grid-column: 1 / -1; text-align: left; }
+    .hero { padding: 28px 22px; }
+    .panel { padding: 22px 18px; }
+  }
+  @media (max-width: 560px) { .vs-row { grid-template-columns: 1fr; gap: 6px; } .proj { grid-template-columns: 1fr; } }
+  @media (prefers-reduced-motion: reduce) { .card, .proj .bar, .vs-fill { transition: none !important; } }
+</style>
+</head>
+<body>
+  <!-- vendored Chart.js + collector data MUST be first, before our script -->
+  <script src="vendor/chart.umd.min.js"></script>
+  <script src="data/savings.js"></script>
+
+  <div id="app" class="wrap"></div>
+
+  <script>
+  (function () {
+    "use strict";
+
+    var S = (typeof window !== "undefined") ? window.SAVINGS : null;
+    var app = document.getElementById("app");
+
+    function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+
+    /* ----- no data file at all ----- */
+    if (!S || !S.config) {
+      app.innerHTML =
+        '<div class="card empty">' +
+          '<div class="e-emoji">📊</div>' +
+          '<h1>No data yet</h1>' +
+          '<p>The dashboard reads <b>window.SAVINGS</b> from <code style="display:inline;padding:1px 6px">data/savings.js</code>, ' +
+          'which hasn\'t been generated yet. Run the collector to produce it:</p>' +
+          '<code>node collect-savings.mjs</code>' +
+        '</div>';
+      return;
+    }
+
+    var cfg = S.config || {};
+    var mem = S.cloudMem || { notDetected: true, reason: "No Cloud Mem data." };
+    var gfx = S.graphify || { notDetected: true, reason: "No Graphify data." };
+    var memOk = mem && !mem.notDetected;
+    var gfxOk = gfx && !gfx.notDetected;
+    var rate = cfg.dollarsPerMillionTokens;
+    var combined = S.combined || { savedDollars: 0, savedTokens: 0 };
+
+    /* ----- neither tool detected ----- */
+    if (!memOk && !gfxOk) {
+      app.innerHTML =
+        '<div class="card empty">' +
+          '<div class="e-emoji">🔌</div>' +
+          '<h1>No tools detected yet</h1>' +
+          '<p>This dashboard measures savings from <b>claude-mem</b> and <b>Graphify</b>. Neither was found on this machine.</p>' +
+          '<p style="font-size:13px">' + esc(mem.reason || "") + '<br>' + esc(gfx.reason || "") + '</p>' +
+          '<p>Install at least one, capture/build some data, then run:</p>' +
+          '<code>node collect-savings.mjs</code>' +
+        '</div>';
+      return;
+    }
+
+    /* ================= HELPERS ================= */
+    function commas(n) { return Math.round(n).toLocaleString("en-US"); }
+    function trim(x) { var r = Math.round(x * 10) / 10; return (r % 1 === 0) ? String(r) : r.toFixed(1); }
+    function compactTokens(n) {
+      var a = Math.abs(n);
+      if (a >= 1e9) return trim(n / 1e9) + "B";
+      if (a >= 1e6) return trim(n / 1e6) + "M";
+      if (a >= 1e3) return trim(n / 1e3) + "k";
+      return commas(n);
+    }
+    function money(n) { return "$" + Math.round(n).toLocaleString("en-US"); }
+    function money2(n) { return "$" + Number(n).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+    function pct(n) { return trim(n) + "%"; }
+    function dayLabel(iso) { var d = new Date(iso + "T00:00:00"); return isNaN(d) ? iso : d.toLocaleDateString("en-US", { month: "short", day: "numeric" }); }
+    function fmtDate(iso) { var d = new Date(iso); return isNaN(d) ? esc(iso) : d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }); }
+
+    var prefersReduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    function countUp(el, to, fmt, dur) {
+      if (!el) return;
+      if (prefersReduced) { el.textContent = fmt(to); return; }
+      dur = dur || 1400; var start = null;
+      function ease(t) { return 1 - Math.pow(1 - t, 3); }
+      function step(ts) { if (start === null) start = ts; var p = Math.min((ts - start) / dur, 1); el.textContent = fmt(to * ease(p)); if (p < 1) requestAnimationFrame(step); else el.textContent = fmt(to); }
+      requestAnimationFrame(step);
+    }
+
+    /* per-project categorical palette (cohesive but distinct on dark) */
+    var PALETTE = [
+      ["#6366f1", "#818cf8"], ["#14b8a6", "#2dd4bf"], ["#f59e0b", "#fbbf24"], ["#ec4899", "#f472b6"],
+      ["#0ea5e9", "#38bdf8"], ["#a3e635", "#bef264"], ["#8b5cf6", "#a78bfa"], ["#f43f5e", "#fb7185"],
+      ["#22d3ee", "#67e8f9"], ["#fb923c", "#fdba74"], ["#34d399", "#6ee7b7"], ["#c084fc", "#d8b4fe"]
+    ];
+
+    /* ================= BUILD ================= */
+    var siteName = esc(cfg.siteName || "");
+    var dashTitle = esc(cfg.dashboardTitle || "Token Savings");
+    var updated = esc(S.generatedAtLocal || "—");
+
+    var html = "";
+
+    // -------- HEADER --------
+    html +=
+      '<header class="topbar">' +
+        '<div class="brand">' +
+          (siteName ? '<span class="site">' + siteName + '</span>' : '') +
+          '<span class="title">' + dashTitle + '</span>' +
+        '</div>' +
+        '<span class="updated-pill"><span class="dot"></span>Updated <b>' + updated + '</b></span>' +
+      '</header>';
+
+    // -------- HERO (mem-led if available, else graphify-led) --------
+    if (memOk) {
+      html +=
+        '<section class="hero card">' +
+          '<div class="kicker">Saved so far</div>' +
+          '<div class="bignum" id="heroDollars">$0</div>' +
+          '<div class="hero-label">saved by not re-deriving past work — recalling what was already learned instead of re-thinking it.</div>' +
+          '<div class="hero-sub"><span class="mono" id="heroTokens">0</span> of work banked across ' +
+            '<span class="mono">' + commas(mem.observations) + '</span> memories &middot; ' +
+            '<span class="mono">' + commas(mem.distinctDays) + '</span> days' +
+            (gfxOk ? ' &middot; plus <span class="mono">' + trim(gfx.reductionFactor) + '×</span> fewer tokens per graph query' : '') + '.</div>' +
+          '<div class="caveat">These figures compare against a &ldquo;load everything, every time&rdquo; baseline you would never actually run. ' +
+            'They&rsquo;re <b>directional</b> — a sense of scale, not a literal invoice.</div>' +
+        '</section>';
+    } else {
+      html +=
+        '<section class="hero card gfx-lead">' +
+          '<div class="kicker">Graph query reduction</div>' +
+          '<div class="bignum" id="heroGfx">0×</div>' +
+          '<div class="hero-label">fewer tokens to answer a structural question — querying the knowledge graph instead of reading the whole corpus.</div>' +
+          '<div class="hero-sub"><span class="mono">' + commas(gfx.corpusTokensNaive) + '</span> tokens naïve &rarr; ' +
+            '<span class="mono">' + commas(gfx.avgQueryTokens) + '</span> per query.</div>' +
+          '<div class="caveat">Directional, not a literal invoice — measured against reading the full corpus every time. ' +
+            'Install <b>claude-mem</b> to add the memory-savings story too.</div>' +
+        '</section>';
+    }
+
+    // -------- STAT ROW (dynamic) --------
+    var cards = [];
+    if (memOk) cards.push(statCard("accent-mem", "mem", "🧠", "Recall efficiency", pct(mem.efficiencyPct), "leaner than re-deriving"));
+    if (gfxOk) cards.push(statCard("accent-gfx", "gfx", "🕸", "Graph reduction", trim(gfx.reductionFactor) + "×", "fewer tokens / query"));
+    if (memOk) cards.push(statCard("accent-mem", "mem", "📌", "Memories captured", commas(mem.observations), "discrete observations"));
+    if (memOk) cards.push(statCard("accent-mem", "mem", "📅", "Active days", commas(mem.distinctDays), "of captured work"));
+    if (gfxOk && !memOk) cards.push(statCard("accent-gfx", "gfx", "🧩", "Graph size", commas(gfx.nodes) + " / " + commas(gfx.edges), "nodes / edges"));
+    html += '<section class="stat-row">' + cards.join("") + '</section>';
+
+    // -------- CLOUD MEM PANEL --------
+    html += '<section class="panel card">' +
+      '<div class="panel-head"><span class="panel-badge mem">Cloud Mem</span><h2>Work banked, day by day</h2></div>';
+    if (memOk) {
+      var byProj = (mem.byProject || []).slice().sort(function (a, b) { return b.workTokens - a.workTokens; });
+      var maxProj = byProj.reduce(function (m, p) { return Math.max(m, p.workTokens); }, 1);
+      var hi = byProj.filter(function (p) { return p.highlighted; }).length;
+      var projRows = byProj.map(function (p, i) {
+        var w = Math.max(2, (p.workTokens / maxProj) * 100);
+        var dollars = (p.workTokens / 1e6) * rate;
+        var col = PALETTE[i % PALETTE.length];
+        return '<div class="proj">' +
+            '<div class="pname">' +
+              '<span class="swatch" style="background:linear-gradient(135deg,' + col[0] + ',' + col[1] + ')"></span>' +
+              '<span class="nm">' + esc(p.project) + '</span>' +
+              (p.highlighted ? '<span class="tag">pinned</span>' : '') +
+            '</div>' +
+            '<div class="barwrap"><div class="bar" data-w="' + w.toFixed(2) + '" ' +
+              'style="background:linear-gradient(90deg,' + col[0] + ',' + col[1] + ');box-shadow:0 0 16px -3px ' + col[0] + '99"></div></div>' +
+            '<div class="pmeta"><b>' + compactTokens(p.workTokens) + '</b> tok · ' + commas(p.observations) + ' obs · <b>' + money(dollars) + '</b></div>' +
+          '</div>';
+      }).join("");
+      html +=
+        '<p class="panel-sub">Every observation stores what it originally cost to <em>produce</em> that knowledge. Recalling it later is nearly free — so the gap is what we keep.</p>' +
+        '<div class="strip">' +
+          stripCell("Saved", money(mem.savedDollars), "mem") +
+          stripCell("Work banked", compactTokens(mem.workTokens) + " tok", "mem") +
+          stripCell("Observations", commas(mem.observations), "mem") +
+          stripCell("Efficiency", pct(mem.efficiencyPct), "mem") +
+        '</div>' +
+        '<div class="chart-box tall"><canvas id="memChart"></canvas></div>' +
+        '<div class="proj-head">Where the work came from — ' + commas(byProj.length) + ' project' + (byProj.length === 1 ? '' : 's') +
+          (hi ? ' · ' + commas(hi) + ' pinned' : '') + '</div>' +
+        '<div class="proj-list">' + projRows + '</div>';
+    } else {
+      html += notDetect("mem", "🧠", "Cloud Mem not detected", mem.reason,
+        'Once <code>claude-mem</code> is installed and has captured a few sessions, this panel fills with your banked-work total, a daily trend, and a per-project breakdown.');
+    }
+    html += '</section>';
+
+    // -------- GRAPHIFY PANEL --------
+    html += '<section class="panel card">' +
+      '<div class="panel-head"><span class="panel-badge gfx">Graphify</span><h2>One question, a fraction of the tokens</h2></div>';
+    if (gfxOk) {
+      var perDayQueries = cfg.graphifyAssumedQueriesPerDay;
+      var illustrativeMonthly = (gfx.savedDollarsPerQuery || 0) * perDayQueries * 30;
+      var histHasSeries = (S.graphifyHistory || []).length > 1;
+      html +=
+        '<p class="panel-sub">Answering a structural question by querying the knowledge graph instead of naïvely reading the whole corpus.</p>' +
+        '<div class="gfx-grid">' +
+          '<div>' +
+            '<div class="gfx-hero">' +
+              '<div class="gx-num">' + trim(gfx.reductionFactor) + '×</div>' +
+              '<div class="gx-lbl">fewer tokens per question — <b>' + money2(gfx.savedDollarsPerQuery || 0) + ' saved per question</b></div>' +
+            '</div>' +
+            '<div class="vs">' +
+              '<div class="vs-row"><div class="vs-lbl"><b>Naïve read</b>whole corpus</div>' +
+                '<div class="vs-track"><div class="vs-fill naive" data-w="100"></div></div>' +
+                '<div class="vs-num">' + commas(gfx.corpusTokensNaive) + ' tok</div></div>' +
+              '<div class="vs-row"><div class="vs-lbl"><b>Graph query</b>targeted</div>' +
+                '<div class="vs-track"><div class="vs-fill graph" data-w="' + Math.max(6, (gfx.avgQueryTokens / gfx.corpusTokensNaive) * 100).toFixed(2) + '"></div></div>' +
+                '<div class="vs-num graph">' + commas(gfx.avgQueryTokens) + ' tok</div></div>' +
+            '</div>' +
+            (perDayQueries ? '<div class="illus">' +
+              '<span class="il-tag">Illustrative · estimate</span>' +
+              '<div class="il-body">At ~<span class="mono">' + commas(perDayQueries) + '</span> graph queries/day, that&rsquo;s ≈ <span class="mono">' + money(illustrativeMonthly) + '/mo</span> saved.</div>' +
+              '<div class="il-foot">Graphify keeps no per-query log, so the query rate is an assumption from <b>config.graphifyAssumedQueriesPerDay</b> — not a measurement.</div>' +
+            '</div>' : '') +
+          '</div>' +
+          '<div>' +
+            '<div class="ledger">' +
+              '<div class="lh">Build investment · one-time cost</div>' +
+              (gfx.buildTokens != null ? ledgerRow("Graph build tokens", compactTokens(gfx.buildTokens) + " tok") : "") +
+              (gfx.buildCostDollars != null ? ledgerRow("Build cost", money2(gfx.buildCostDollars)) : "") +
+              ledgerRow("Nodes / edges", commas(gfx.nodes) + " / " + commas(gfx.edges)) +
+              (gfx.build ? ledgerRow("Build runs", commas(gfx.build.runs)) : "") +
+              (gfx.build && gfx.build.lastBuilt ? ledgerRow("Last built", fmtDate(gfx.build.lastBuilt)) : "") +
+              '<div class="lnote">What it cost to <em>build</em> the graph — the honest investment side. Each question afterward draws it down by ' + money2(gfx.savedDollarsPerQuery || 0) + '.</div>' +
+            '</div>' +
+            (histHasSeries
+              ? '<div class="chart-box mid" style="margin-top:18px"><canvas id="gfxHistChart"></canvas></div>'
+              : '<div class="hist-note"><b>History accrues daily.</b> The reduction-over-time trend fills in as the collector runs again.</div>') +
+          '</div>' +
+        '</div>';
+    } else {
+      html += notDetect("gfx", "🕸", "Graphify not detected", gfx.reason,
+        'Run <code>graphify</code> on a repo to build a knowledge graph, then this panel shows the per-query token reduction and the graph\'s build cost.');
+    }
+    html += '</section>';
+
+    // -------- FOOTER --------
+    var methodBits = [];
+    if (memOk) methodBits.push('Cloud Mem saved = work tokens − recall tokens (' + commas(mem.recallTokensPerObservation) + ' tok/observation).');
+    if (gfxOk) methodBits.push('Graphify saved/query = naïve corpus read − average graph-query cost.');
+    methodBits.push('Dollars = tokens × rate.');
+    html +=
+      '<footer>' +
+        '<div><b>Method:</b> ' + methodBits.join(" ") + '</div>' +
+        '<div style="margin-top:8px">Compared against a &ldquo;load everything, every time&rdquo; baseline you&rsquo;d never actually run — directional, not a literal invoice. Anything marked <b>illustrative</b> is an estimate.</div>' +
+        '<span class="frate">rate: ' + money(rate) + '/M tokens · configurable in config.json</span>' +
+      '</footer>';
+
+    app.innerHTML = html;
+
+    /* ----- template helpers ----- */
+    function statCard(accent, ic, emoji, label, value, foot) {
+      return '<div class="card stat hoverable ' + accent + '"><div class="stat-top"><span class="stat-label">' + esc(label) + '</span>' +
+        '<span class="ic ' + ic + '">' + emoji + '</span></div><span class="stat-val">' + esc(value) + '</span>' +
+        '<span class="stat-foot">' + esc(foot) + '</span></div>';
+    }
+    function stripCell(k, v, tone) { return '<div class="cell"><div class="k">' + esc(k) + '</div><div class="v ' + (tone || "") + '">' + esc(v) + '</div></div>'; }
+    function ledgerRow(k, v) { return '<div class="lrow"><span class="lk">' + esc(k) + '</span><span class="lv">' + esc(v) + '</span></div>'; }
+    function notDetect(kind, emoji, title, reason, hint) {
+      return '<div class="notdetect ' + kind + '"><div class="nd-ic">' + emoji + '</div><div class="nd-body">' +
+        '<p class="nd-title">' + esc(title) + '</p><p class="nd-reason">' + esc(reason || "") + '</p><p class="nd-hint">' + hint + '</p></div></div>';
+    }
+
+    /* ================= ANIMATE ================= */
+    if (memOk) {
+      countUp(document.getElementById("heroDollars"), combined.savedDollars, money, 1600);
+      countUp(document.getElementById("heroTokens"), mem.workTokens, function (n) { return compactTokens(n) + " tokens"; }, 1600);
+    } else if (gfxOk) {
+      countUp(document.getElementById("heroGfx"), gfx.reductionFactor, function (n) { return trim(n) + "×"; }, 1400);
+    }
+    requestAnimationFrame(function () { requestAnimationFrame(function () {
+      document.querySelectorAll(".proj .bar").forEach(function (b) { b.style.width = b.getAttribute("data-w") + "%"; });
+      document.querySelectorAll(".vs-fill").forEach(function (f) { f.style.width = f.getAttribute("data-w") + "%"; });
+    }); });
+
+    /* ================= CHARTS ================= */
+    if (typeof Chart === "undefined") return;
+    Chart.defaults.font.family = getComputedStyle(document.body).fontFamily;
+    Chart.defaults.color = "#9aa3b8";
+    Chart.defaults.font.size = 11.5;
+    function grad(ctx, area, c1, c2) { var g = ctx.createLinearGradient(0, area.top, 0, area.bottom); g.addColorStop(0, c1); g.addColorStop(1, c2); return g; }
+    var animOpt = prefersReduced ? false : { duration: 1100, easing: "easeOutQuart" };
+
+    if (memOk) {
+      var daily = (mem.daily || []).slice();
+      (function () {
+        var el = document.getElementById("memChart"); if (!el) return;
+        var labels = daily.map(function (d) { return dayLabel(d.day); });
+        var cum = daily.map(function (d) { return d.cumulativeWorkTokens; });
+        var per = daily.map(function (d) { return d.workTokens; });
+        new Chart(el.getContext("2d"), {
+          data: { labels: labels, datasets: [
+            { type: "bar", label: "Work banked / day", data: per, yAxisID: "yBar", order: 2, borderRadius: 4, maxBarThickness: 22,
+              backgroundColor: function (c) { var ch = c.chart; if (!ch.chartArea) return "rgba(139,92,246,0.35)"; return grad(ch.ctx, ch.chartArea, "rgba(139,92,246,0.55)", "rgba(139,92,246,0.08)"); } },
+            { type: "line", label: "Cumulative work banked", data: cum, yAxisID: "yCum", order: 1, borderColor: "#8b5cf6", borderWidth: 2.5, tension: 0.35, pointRadius: 0, pointHoverRadius: 5, pointHoverBackgroundColor: "#c3c8ff", pointHoverBorderColor: "#8b5cf6", fill: true,
+              backgroundColor: function (c) { var ch = c.chart; if (!ch.chartArea) return "rgba(99,102,241,0.2)"; return grad(ch.ctx, ch.chartArea, "rgba(99,102,241,0.42)", "rgba(99,102,241,0.01)"); } }
+          ] },
+          options: { responsive: true, maintainAspectRatio: false, animation: animOpt, interaction: { mode: "index", intersect: false }, layout: { padding: { top: 6 } },
+            plugins: { legend: { display: true, position: "top", align: "end", labels: { boxWidth: 10, boxHeight: 10, usePointStyle: true, pointStyle: "circle", padding: 14, color: "#9aa3b8" } },
+              tooltip: { backgroundColor: "rgba(12,16,24,0.95)", borderColor: "rgba(255,255,255,0.12)", borderWidth: 1, padding: 11, cornerRadius: 9, titleColor: "#eef1f8", bodyColor: "#c9d0e6", callbacks: { label: function (c) { return " " + c.dataset.label + ": " + compactTokens(c.parsed.y) + " tok"; } } } },
+            scales: { x: { grid: { display: false }, ticks: { maxRotation: 0, autoSkip: true, maxTicksLimit: 9 } },
+              yCum: { position: "left", grid: { color: "rgba(255,255,255,0.05)" }, ticks: { callback: function (v) { return compactTokens(v); } }, title: { display: true, text: "cumulative", color: "#69728a", font: { size: 10 } } },
+              yBar: { position: "right", grid: { display: false }, ticks: { callback: function (v) { return compactTokens(v); } }, title: { display: true, text: "per day", color: "#69728a", font: { size: 10 } } } } }
+        });
+      })();
+
+      function sparkOn(canvas, series, color) {
+        if (!canvas || !series.length) return;
+        new Chart(canvas.getContext("2d"), { type: "line",
+          data: { labels: series.map(function (_, i) { return i; }), datasets: [{ data: series, borderColor: color, borderWidth: 1.6, tension: 0.4, pointRadius: 0, fill: true,
+            backgroundColor: function (c) { var ch = c.chart; if (!ch.chartArea) return "transparent"; var g = ch.ctx.createLinearGradient(0, ch.chartArea.top, 0, ch.chartArea.bottom); g.addColorStop(0, color.replace("1)", "0.28)").replace("rgb", "rgba")); g.addColorStop(1, "rgba(0,0,0,0)"); return g; } }] },
+          options: { responsive: true, maintainAspectRatio: false, animation: prefersReduced ? false : { duration: 900 }, plugins: { legend: { display: false }, tooltip: { enabled: false } }, scales: { x: { display: false }, y: { display: false } }, elements: { line: { borderCapStyle: "round" } } } });
+      }
+      var obsSeries = daily.map(function (d) { return d.observations; });
+      var cumSeries = daily.map(function (d) { return d.cumulativeWorkTokens; });
+      (function () {
+        var stats = document.querySelectorAll(".stat-row .stat.accent-mem");
+        function addSpark(node, series, color) { if (!node) return; var box = document.createElement("div"); box.className = "spark-box"; var c = document.createElement("canvas"); box.appendChild(c); node.appendChild(box); sparkOn(c, series, color); }
+        addSpark(stats[0], cumSeries, "rgb(139,92,246,1)");
+        if (stats[1]) addSpark(stats[1], obsSeries, "rgb(99,102,241,1)");
+        if (stats[2]) addSpark(stats[2], cumSeries, "rgb(20,184,166,1)");
+      })();
+    }
+
+    if (gfxOk && (S.graphifyHistory || []).length > 1) {
+      var ghist = S.graphifyHistory;
+      var hel = document.getElementById("gfxHistChart");
+      if (hel) {
+        new Chart(hel.getContext("2d"), { type: "line",
+          data: { labels: ghist.map(function (h) { return dayLabel(h.day); }), datasets: [{ label: "Reduction factor", data: ghist.map(function (h) { return h.reductionFactor; }), borderColor: "#10b981", borderWidth: 2.5, tension: 0.35, pointRadius: 3, pointBackgroundColor: "#10b981", fill: true,
+            backgroundColor: function (c) { var ch = c.chart; if (!ch.chartArea) return "rgba(16,185,129,0.18)"; return grad(ch.ctx, ch.chartArea, "rgba(20,184,166,0.34)", "rgba(16,185,129,0.01)"); } }] },
+          options: { responsive: true, maintainAspectRatio: false, animation: animOpt, plugins: { legend: { display: false }, tooltip: { backgroundColor: "rgba(12,16,24,0.95)", borderColor: "rgba(255,255,255,0.12)", borderWidth: 1, padding: 10, cornerRadius: 9, titleColor: "#eef1f8", bodyColor: "#8ff0df", callbacks: { label: function (c) { return " " + trim(c.parsed.y) + "× reduction"; } } } },
+            scales: { x: { grid: { display: false } }, y: { grid: { color: "rgba(255,255,255,0.05)" }, ticks: { callback: function (v) { return trim(v) + "×"; } } } } } });
+      }
+    }
+  })();
+  </script>
+</body>
+</html>

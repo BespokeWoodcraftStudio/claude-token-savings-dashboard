@@ -1,0 +1,18 @@
+{
+  "siteName": "",
+  "dashboardTitle": "Token Savings",
+  "dollarsPerMillionTokens": 30,
+  "recallTokensPerObservation": 50,
+  "graphifyAssumedQueriesPerDay": 8,
+  "claudeMemDbPath": "~/.claude-mem/claude-mem.db",
+  "graphify": {
+    "graphPath": "graphify-out/graph.json",
+    "searchPaths": [
+      "graphify-out/graph.json",
+      "../graphify-out/graph.json",
+      "../../graphify-out/graph.json"
+    ]
+  },
+  "scope": { "mode": "global", "projects": [] },
+  "highlightProjects": []
+}

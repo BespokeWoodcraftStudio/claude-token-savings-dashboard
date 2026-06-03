@@ -1,0 +1,14 @@
+# All generated/local data — rebuilt from YOUR tools on every run (savings.js,
+# savings.json, and the accruing graphify-history.json). It's machine-specific,
+# so it lives only in your clone and is never versioned. The folder is kept via
+# .gitkeep so the collector has somewhere to write.
+data/*
+!data/.gitkeep
+
+# OS / editor noise
+.DS_Store
+.DS_Store?
+._*
+*.swp
+*.swo
+node_modules/

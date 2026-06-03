@@ -1,0 +1,32 @@
+{
+  "siteName": "",
+  "dashboardTitle": "Token Savings",
+  "dollarsPerMillionTokens": 30,
+  "recallTokensPerObservation": 50,
+  "graphifyAssumedQueriesPerDay": 8,
+  "claudeMemDbPath": "~/.claude-mem/claude-mem.db",
+  "graphify": {
+    "graphPath": "graphify-out/graph.json",
+    "searchPaths": [
+      "graphify-out/graph.json",
+      "../graphify-out/graph.json",
+      "../../graphify-out/graph.json"
+    ]
+  },
+  "scope": { "mode": "global", "projects": [] },
+  "highlightProjects": [],
+
+  "_notes": {
+    "siteName": "Optional label shown above the title (e.g. your name or org). Leave \"\" to hide.",
+    "dashboardTitle": "The H1 on the page.",
+    "dollarsPerMillionTokens": "Blended $/million-tokens rate for all dollar estimates. Pick a rate that reflects the model you mostly run (e.g. ~15-30 for premium tiers). It's an assumption — the page says so.",
+    "recallTokensPerObservation": "Conservative model of what it costs to recall one memory. saved = work_tokens - (observations * this).",
+    "graphifyAssumedQueriesPerDay": "ILLUSTRATIVE ONLY. Graphify keeps no per-query log, so the monthly-saved projection assumes this many graph queries/day. Labelled as an estimate on the page.",
+    "claudeMemDbPath": "Path to the claude-mem SQLite DB. Default is where claude-mem installs it. Supports ~ and absolute/relative paths.",
+    "graphify.graphPath": "Path to your graphify-out/graph.json. Relative paths are resolved from where you RUN the collector (your repo root), then from this folder.",
+    "graphify.searchPaths": "Extra locations to auto-search if graphPath isn't found — handy when one dashboard tracks a graph in a sibling repo.",
+    "scope.mode": "'global' = every project in the claude-mem DB. 'projects' = only scope.projects[].",
+    "scope.projects": "Project names to include when scope.mode is 'projects'.",
+    "highlightProjects": "Project names to visually highlight (a 'pinned' tag) in the per-project breakdown. Optional."
+  }
+}
