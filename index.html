@@ -6,7 +6,7 @@
 <title>Token Savings</title>
 <style>
   :root {
-    /* Cloud Mem — indigo / violet */
+    /* claude-mem — indigo / violet */
     --mem-1: #6366f1;
     --mem-2: #8b5cf6;
     --mem-glow: rgba(99, 102, 241, 0.55);
@@ -250,7 +250,7 @@
     }
 
     var cfg = S.config || {};
-    var mem = S.cloudMem || { notDetected: true, reason: "No Cloud Mem data." };
+    var mem = S.cloudMem || { notDetected: true, reason: "No claude-mem data." };
     var gfx = S.graphify || { notDetected: true, reason: "No Graphify data." };
     var memOk = mem && !mem.notDetected;
     var gfxOk = gfx && !gfx.notDetected;
@@ -357,9 +357,9 @@
     if (gfxOk && !memOk) cards.push(statCard("accent-gfx", "gfx", "🧩", "Graph size", commas(gfx.nodes) + " / " + commas(gfx.edges), "nodes / edges"));
     html += '<section class="stat-row">' + cards.join("") + '</section>';
 
-    // -------- CLOUD MEM PANEL --------
+    // -------- CLAUDE-MEM PANEL --------
     html += '<section class="panel card">' +
-      '<div class="panel-head"><span class="panel-badge mem">Cloud Mem</span><h2>Work banked, day by day</h2></div>';
+      '<div class="panel-head"><span class="panel-badge mem">claude-mem</span><h2>Work banked, day by day</h2></div>';
     if (memOk) {
       var byProj = (mem.byProject || []).slice().sort(function (a, b) { return b.workTokens - a.workTokens; });
       var maxProj = byProj.reduce(function (m, p) { return Math.max(m, p.workTokens); }, 1);
@@ -392,7 +392,7 @@
           (hi ? ' · ' + commas(hi) + ' pinned' : '') + '</div>' +
         '<div class="proj-list">' + projRows + '</div>';
     } else {
-      html += notDetect("mem", "🧠", "Cloud Mem not detected", mem.reason,
+      html += notDetect("mem", "🧠", "claude-mem not detected", mem.reason,
         'Once <code>claude-mem</code> is installed and has captured a few sessions, this panel fills with your banked-work total, a daily trend, and a per-project breakdown.');
     }
     html += '</section>';
@@ -449,7 +449,7 @@
 
     // -------- FOOTER --------
     var methodBits = [];
-    if (memOk) methodBits.push('Cloud Mem saved = work tokens − recall tokens (' + commas(mem.recallTokensPerObservation) + ' tok/observation).');
+    if (memOk) methodBits.push('claude-mem saved = work tokens − recall tokens (' + commas(mem.recallTokensPerObservation) + ' tok/observation).');
     if (gfxOk) methodBits.push('Graphify saved/query = naïve corpus read − average graph-query cost.');
     methodBits.push('Dollars = tokens × rate.');
     html +=

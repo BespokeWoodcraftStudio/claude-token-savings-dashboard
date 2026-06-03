@@ -143,7 +143,7 @@ ok "Node ${NODE_VERSION} (>= 18) — good."
 if command -v sqlite3 >/dev/null 2>&1; then
   ok "sqlite3 — found."
 else
-  warn "sqlite3 not found. The Cloud Mem (claude-mem) panel needs it to read"
+  warn "sqlite3 not found. The claude-mem panel needs it to read"
   warn "  your memory DB; without it that panel will show a hint. Graphify is"
   warn "  unaffected. To install:"
   warn "    • macOS:  brew install sqlite"
@@ -156,14 +156,14 @@ fi
 # ===========================================================================
 step "Detecting context tools…"
 
-# --- claude-mem (a.k.a. Cloud Mem) ----------------------------------------
+# --- claude-mem (a.k.a. claude-mem) ----------------------------------------
 # Default DB location. config.json can override claudeMemDbPath, but for a
 # quick informational check the default path is the right thing to probe.
 CLAUDE_MEM_DB="$HOME/.claude-mem/claude-mem.db"
 if [ -f "$CLAUDE_MEM_DB" ]; then
   ok "claude-mem detected (DB: ${CLAUDE_MEM_DB})"
 else
-  info "claude-mem not detected (the Cloud Mem panel will show a hint)."
+  info "claude-mem not detected (the claude-mem panel will show a hint)."
   info "  Looked for: ${CLAUDE_MEM_DB}"
 fi
 

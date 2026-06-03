@@ -8,7 +8,7 @@ description: Use when the user wants to regenerate and open the Token Savings da
 Refresh and open the **Token Savings** dashboard: a self-contained dark page that
 shows how many tokens and dollars two Claude Code context tools save —
 
-- **claude-mem** (Cloud Mem): a memory system. Each observation stores the tokens
+- **claude-mem**: a memory system. Each observation stores the tokens
   it cost to *originally* produce that knowledge; summed = "work captured".
   Recalling it later is nearly free, so **saved = work − recall**.
 - **Graphify**: a knowledge graph over a repo. Answering a structural question via
@@ -50,7 +50,7 @@ already on the machine — no npm install, no network, no fetch. Node 18+ requir
 4. **Summarize the headline numbers** by reading `data/savings.json` and reporting
    back to the user, in one or two lines:
    - **Combined:** `combined.savedDollars` (saved $) and `combined.savedTokens`.
-   - **Cloud Mem:** `cloudMem.observations`, `cloudMem.workTokens` (work captured),
+   - **claude-mem:** `cloudMem.observations`, `cloudMem.workTokens` (work captured),
      `cloudMem.savedDollars`, `cloudMem.efficiencyPct` — or its `notDetected`
      reason if the panel is empty.
    - **Graphify:** `graphify.reductionFactor` (e.g. `79.7x/query`) and
@@ -60,7 +60,7 @@ already on the machine — no npm install, no network, no fetch. Node 18+ requir
 
 - All figures are framed against a "load everything, every time" baseline you'd
   never actually run — directional, not an invoice.
-- Cloud Mem efficiency is capped at 99.9% (never a fake 100%).
+- claude-mem efficiency is capped at 99.9% (never a fake 100%).
 - Any Graphify monthly projection is **illustrative** — Graphify has no per-query
   log, so usage volume is assumed (`graphifyAssumedQueriesPerDay`).
 

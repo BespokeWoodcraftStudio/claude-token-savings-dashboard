@@ -12,7 +12,7 @@ A self-contained, dark-mode dashboard that turns two Claude Code context tools i
 
 Two panels, each from a real tool on your machine:
 
-- **Cloud Mem** (`claude-mem`) — your memory system. Every observation it stores carries the number of tokens it cost to *originally* produce that knowledge; sum those and you get **work banked**. Recalling it later is nearly free, so the saving is `work − recall`. The panel shows banked work, a **daily trend**, and a **per-project breakdown**.
+- **claude-mem** — your memory system. Every observation it stores carries the number of tokens it cost to *originally* produce that knowledge; sum those and you get **work banked**. Recalling it later is nearly free, so the saving is `work − recall`. The panel shows banked work, a **daily trend**, and a **per-project breakdown**.
 - **Graphify** — a knowledge graph over a repo. Answering a structural question through the graph costs a fraction of reading the whole codebase (often a **~79.7× reduction**). The panel shows **per-query reduction** plus a **build ledger** (the one-time token cost of building the graph).
 
 Up top: the **headline dollars saved**, summed across both tools.
@@ -85,7 +85,7 @@ Full annotated reference with every key explained: **[`config.example.json`](con
 
 ## How the numbers work
 
-- **Cloud Mem:** `saved_tokens = Σ discovery_tokens − (observations × recallTokensPerObservation)`, then `$ = saved_tokens / 1e6 × dollarsPerMillionTokens`. Efficiency is capped at **99.9%** — we never show a fake 100%.
+- **claude-mem:** `saved_tokens = Σ discovery_tokens − (observations × recallTokensPerObservation)`, then `$ = saved_tokens / 1e6 × dollarsPerMillionTokens`. Efficiency is capped at **99.9%** — we never show a fake 100%.
 - **Graphify:** `saved_per_query = naïve_corpus_tokens − avg_query_tokens`; the one-time build cost comes from `graphify-out/cost.json`. Any monthly projection is labelled **"illustrative"** because Graphify keeps no per-query log.
 
 Both panels compare against a baseline you'd never really run, so treat the totals as directional. Full walkthrough: **[`docs/HOW-IT-WORKS.md`](docs/HOW-IT-WORKS.md)**.

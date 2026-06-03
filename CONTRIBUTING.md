@@ -49,7 +49,7 @@ It must report **0 overlaps and 0 clipping**. If it doesn't, the change isn't re
 This dashboard exists to give people a real, defensible read on what these tools save — so honesty is a feature, not a nicety:
 
 - **No fabricated or demo data, ever.** If we can't measure it, we don't show a number.
-- **Label estimates as estimates.** All figures are framed against a "load everything, every time" baseline you'd never actually run — directional, not an invoice. Cloud Mem efficiency is capped at 99.9% (never a fake 100%), and any Graphify monthly projection is labelled "illustrative" because Graphify keeps no per-query log.
+- **Label estimates as estimates.** All figures are framed against a "load everything, every time" baseline you'd never actually run — directional, not an invoice. claude-mem efficiency is capped at 99.9% (never a fake 100%), and any Graphify monthly projection is labelled "illustrative" because Graphify keeps no per-query log.
 
 If a change would make a number look better than the underlying data supports, it doesn't belong here. When in doubt, undercount and say so.
 

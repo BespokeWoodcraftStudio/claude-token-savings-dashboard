@@ -9,7 +9,7 @@ If you just want to install it, see [INSTALL.md](INSTALL.md). This doc is about 
 ## Contents
 
 - [The one honesty caveat (read this first)](#the-one-honesty-caveat-read-this-first)
-- [Cloud Mem: where the numbers come from](#cloud-mem-where-the-numbers-come-from)
+- [claude-mem: where the numbers come from](#cloud-mem-where-the-numbers-come-from)
 - [Graphify: where the numbers come from](#graphify-where-the-numbers-come-from)
 - [The formulas, exactly](#the-formulas-exactly)
 - [Every assumption, stated plainly](#every-assumption-stated-plainly)
@@ -27,14 +27,14 @@ Every "saved" figure is measured against a **"load everything, every time" basel
 
 Two specific guardrails keep this honest:
 
-1. **Cloud Mem efficiency is capped at 99.9%.** Even if the math rounds to a perfect 100% saving, the dashboard never claims it. Recall is cheap, but it's never free, so a fake 100% would be a lie. The cap makes that explicit.
+1. **claude-mem efficiency is capped at 99.9%.** Even if the math rounds to a perfect 100% saving, the dashboard never claims it. Recall is cheap, but it's never free, so a fake 100% would be a lie. The cap makes that explicit.
 2. **Any Graphify monthly projection is labelled "illustrative."** Graphify keeps no per-query log, so it cannot know how many graph queries you actually ran. Any "saved this month" number assumes a queries-per-day figure (default 8) and says so on its face.
 
 Keep that framing in mind for everything below. The inputs are real; the baseline is deliberately generous; the page tells you so.
 
 ---
 
-## Cloud Mem: where the numbers come from
+## claude-mem: where the numbers come from
 
 [claude-mem](https://github.com/thedotmack/claude-mem) stores **observations** — discrete pieces of knowledge it captured while you worked — in a local SQLite database (default `~/.claude-mem/claude-mem.db`).
 
@@ -85,7 +85,7 @@ Building the graph isn't free — it costs tokens once. The collector reads `cos
 
 So the graph's savings are always shown **honestly against their build cost** — a real per-query win, minus a real one-time investment.
 
-If no graph is found, or the `graphify` CLI isn't on PATH, or the benchmark fails, the panel reports `notDetected` and the Cloud Mem panel still renders.
+If no graph is found, or the `graphify` CLI isn't on PATH, or the benchmark fails, the panel reports `notDetected` and the claude-mem panel still renders.
 
 ---
 
@@ -93,7 +93,7 @@ If no graph is found, or the `graphify` CLI isn't on PATH, or the benchmark fail
 
 These are the literal computations in `collect-savings.mjs`.
 
-### Cloud Mem
+### claude-mem
 
 ```
 recallTokens  = observations × recallTokensPerObservation
@@ -136,7 +136,7 @@ One rate, one rule, applied identically to both tools. Change the rate in `confi
 | **`recallTokensPerObservation`** | `50` | A conservative flat model for what it costs to recall one memory. Recall isn't literally free, so we subtract this for every observation rather than pretend it's zero. |
 | **`graphifyAssumedQueriesPerDay`** | `8` | **Illustrative only.** Graphify keeps no per-query log, so any monthly-saved projection assumes this many graph queries per day. Clearly labelled as an estimate on the page. |
 | **The "load everything every time" baseline** | — | The reference world these savings are measured against. Directional, not a literal bill. See the [caveat](#the-one-honesty-caveat-read-this-first). |
-| **99.9% efficiency cap** | — | Cloud Mem efficiency is hard-capped at 99.9% so the dashboard never shows a fake, dishonest 100%. |
+| **99.9% efficiency cap** | — | claude-mem efficiency is hard-capped at 99.9% so the dashboard never shows a fake, dishonest 100%. |
 
 Every one of these is a config key (except the baseline and the cap, which are deliberately fixed). Tune them to match your reality — but tune them *honestly*.
 

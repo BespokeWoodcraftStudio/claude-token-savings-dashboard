@@ -2,7 +2,7 @@
 
 This is the full setup guide for **Token Savings** — a self-contained dark dashboard that shows how many tokens (and dollars) two Claude Code context tools save you:
 
-- **Cloud Mem** ([claude-mem](https://github.com/thedotmack/claude-mem)) — a memory system. Every observation it stores remembers how many tokens it cost to *originally* produce that knowledge. Recalling it later is nearly free, so the difference is your saving.
+- **[claude-mem](https://github.com/thedotmack/claude-mem)** — a memory system. Every observation it stores remembers how many tokens it cost to *originally* produce that knowledge. Recalling it later is nearly free, so the difference is your saving.
 - **Graphify** — a knowledge graph over a repo. Answering a structural question through the graph costs a fraction of reading the whole codebase (e.g. ~79.7× fewer tokens).
 
 The dashboard **auto-detects** both tools. If you only have one installed, that panel renders and the other shows a friendly "not detected" state. **No demo or fake data is ever shown** — if there's nothing real to display, it says so.
@@ -30,7 +30,7 @@ You need:
 | Requirement | Why | Check |
 |---|---|---|
 | **Node.js 18+** | Runs the collector (`collect-savings.mjs`). Uses only built-in modules — **zero `npm install`**. | `node --version` |
-| **`sqlite3` CLI** | The collector reads the claude-mem database by shelling out to `sqlite3`. Only needed for the Cloud Mem panel. | `sqlite3 --version` |
+| **`sqlite3` CLI** | The collector reads the claude-mem database by shelling out to `sqlite3`. Only needed for the claude-mem panel. | `sqlite3 --version` |
 | **At least one of:** [claude-mem](https://github.com/thedotmack/claude-mem) **or** [graphify](https://www.npmjs.com/package/@graphify/cli) | These are what you're measuring. With neither installed there's nothing to show. | `which graphify` / claude-mem DB exists |
 
 You do **not** need a web server, a build step, or any npm packages. Chart.js is vendored in `vendor/chart.umd.min.js`.
@@ -90,7 +90,7 @@ Now [open `index.html`](#viewing-the-dashboard).
 
 Everything lives in **`config.json`** (copied from `config.example.json`). The example file has inline `_notes` for every key. The ones that matter for *finding your data*:
 
-### Cloud Mem (claude-mem)
+### claude-mem
 
 ```jsonc
 {
@@ -266,13 +266,13 @@ node collect-savings.mjs
 
 Then reload the page. If you set up the [SessionStart hook](#auto-refresh-sessionstart-hook), this also happens automatically next time you open Claude in the repo.
 
-### "Cloud Mem not detected"
+### "claude-mem not detected"
 
 The collector couldn't find or read your claude-mem database. Check, in order:
 
 1. **Is claude-mem installed and has it captured anything?** It needs at least one session with observations. The `observations` table must exist and be non-empty.
 2. **Is `claudeMemDbPath` correct?** The default is `~/.claude-mem/claude-mem.db`. If yours lives elsewhere, set the right path in `config.json`.
-3. **Is `sqlite3` installed?** See the next item — the Cloud Mem panel needs it.
+3. **Is `sqlite3` installed?** See the next item — the claude-mem panel needs it.
 4. **Scope too narrow?** If `scope.mode` is `"projects"`, make sure the project names in `scope.projects` actually exist in the DB. An empty scope returns "no observations for the configured project scope."
 
 Re-run `node collect-savings.mjs` after fixing.
