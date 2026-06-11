@@ -1,0 +1,77 @@
+{
+  "/Users/ahamade/Documents/GitHub/claude-token-savings-dashboard/check-overlaps.mjs": {
+    "mtime": 1780519921.1725833,
+    "ast_hash": "f7f939ed2ea024c9d621596b08ec8bf7",
+    "semantic_hash": "f7f939ed2ea024c9d621596b08ec8bf7"
+  },
+  "/Users/ahamade/Documents/GitHub/claude-token-savings-dashboard/collect-savings.mjs": {
+    "mtime": 1780523316.4026487,
+    "ast_hash": "ed80d0e937faa4501a1db8cef56fe8f9",
+    "semantic_hash": "ed80d0e937faa4501a1db8cef56fe8f9"
+  },
+  "/Users/ahamade/Documents/GitHub/claude-token-savings-dashboard/config.example.json": {
+    "mtime": 1780519499.1958315,
+    "ast_hash": "32d608a7c0e701c45633189c0d97f57b",
+    "semantic_hash": "32d608a7c0e701c45633189c0d97f57b"
+  },
+  "/Users/ahamade/Documents/GitHub/claude-token-savings-dashboard/config.json": {
+    "mtime": 1780523408.9862216,
+    "ast_hash": "9cf07307857f0dfccc217626d3183f9d",
+    "semantic_hash": "9cf07307857f0dfccc217626d3183f9d"
+  },
+  "/Users/ahamade/Documents/GitHub/claude-token-savings-dashboard/install.sh": {
+    "mtime": 1780523316.4178276,
+    "ast_hash": "204fb5f29ea960f6b0cc6d75eae76d9f",
+    "semantic_hash": "204fb5f29ea960f6b0cc6d75eae76d9f"
+  },
+  "/Users/ahamade/Documents/GitHub/claude-token-savings-dashboard/vendor/chart.umd.min.js": {
+    "mtime": 1780519383.9432023,
+    "ast_hash": "c9c7a14398a513bdb97934c8468143b9",
+    "semantic_hash": "c9c7a14398a513bdb97934c8468143b9"
+  },
+  "/Users/ahamade/Documents/GitHub/claude-token-savings-dashboard/CONTRIBUTING.md": {
+    "mtime": 1780523316.3948417,
+    "ast_hash": "398c383892399391e5699d203d1b35b3",
+    "semantic_hash": "398c383892399391e5699d203d1b35b3"
+  },
+  "/Users/ahamade/Documents/GitHub/claude-token-savings-dashboard/README.md": {
+    "mtime": 1780523360.3602142,
+    "ast_hash": "b91b150db68c139fea537ff243430740",
+    "semantic_hash": "b91b150db68c139fea537ff243430740"
+  },
+  "/Users/ahamade/Documents/GitHub/claude-token-savings-dashboard/docs/HOW-IT-WORKS.md": {
+    "mtime": 1780523316.4063187,
+    "ast_hash": "12a25a2479a3e26bec47db50196ccb82",
+    "semantic_hash": "12a25a2479a3e26bec47db50196ccb82"
+  },
+  "/Users/ahamade/Documents/GitHub/claude-token-savings-dashboard/docs/INSTALL.md": {
+    "mtime": 1780523360.3645346,
+    "ast_hash": "721b26d5ca007fd286a96f5a96e5af69",
+    "semantic_hash": "721b26d5ca007fd286a96f5a96e5af69"
+  },
+  "/Users/ahamade/Documents/GitHub/claude-token-savings-dashboard/index.html": {
+    "mtime": 1780523382.3568249,
+    "ast_hash": "f06bf11426de1fbd0ad1073986302733",
+    "semantic_hash": "f06bf11426de1fbd0ad1073986302733"
+  },
+  "/Users/ahamade/Documents/GitHub/claude-token-savings-dashboard/skill/README.md": {
+    "mtime": 1780520196.9522274,
+    "ast_hash": "c96c0411dfb6186484c6002d8d7db4db",
+    "semantic_hash": "c96c0411dfb6186484c6002d8d7db4db"
+  },
+  "/Users/ahamade/Documents/GitHub/claude-token-savings-dashboard/skill/SKILL.md": {
+    "mtime": 1780523360.3682737,
+    "ast_hash": "0f0b54eb7e7578e9e158d766c81c8a73",
+    "semantic_hash": "0f0b54eb7e7578e9e158d766c81c8a73"
+  },
+  "/Users/ahamade/Documents/GitHub/claude-token-savings-dashboard/docs/assets/dashboard.png": {
+    "mtime": 1780523408.9163957,
+    "ast_hash": "42debedc3cb92b2a09618c68a16b286c",
+    "semantic_hash": "42debedc3cb92b2a09618c68a16b286c"
+  },
+  "/Users/ahamade/Documents/GitHub/claude-token-savings-dashboard/CLAUDE.md": {
+    "mtime": 1781066084.9960935,
+    "ast_hash": "a7f882d03dd0b194097893ff3c643f28",
+    "semantic_hash": ""
+  }
+}
